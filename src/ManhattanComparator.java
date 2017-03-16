@@ -29,20 +29,13 @@ public class ManhattanComparator implements Comparator<EightPuzzle>
         return totalDistance + puz.getMovesSoFar();
     }
 
-    static int[] findGoalPosition( int tile)
+    private static int[] findGoalPosition( int tile)
     {
-        switch ( tile)
-        {
-            case 1: return new int[]{ 0, 0 };
-            case 2: return new int[]{ 0, 1 };
-            case 3: return new int[]{ 0, 2 };
-            case 4: return new int[]{ 1, 0 };
-            case 5: return new int[]{ 1, 1 };
-            case 6: return new int[]{ 1, 2 };
-            case 7: return new int[]{ 2, 0 };
-            case 8: return new int[]{ 2, 1 };
-            default: return null;
-        }
+        int[] result = new int[2];
+        tile--;
+        result[0] = tile / 3;
+        result[1] = tile % 3;
+        return result;
     }
 
     public static void main( String[] args)
