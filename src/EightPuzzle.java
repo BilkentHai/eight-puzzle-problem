@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Created by deniz on 15/03/17.
@@ -73,13 +74,21 @@ public class EightPuzzle
         return ( Arrays.deepEquals( this.tiles, goalTiles));
     }
 
-    // DOES NOT CHECK IF MOVES SO FAR ARE EQUAL
-    public boolean equals( EightPuzzle other)
+    @Override
+    public boolean equals( Object other)
     {
-        if ( other == null)
-            return false;
+        if ( other == null) return false;
+        if ( other == this) return true;
+        if ( !( other instanceof EightPuzzle)) return false;
 
-        return Arrays.deepEquals( this.tiles, other.tiles);
+        EightPuzzle otherEP = ( EightPuzzle) other;
+
+        return Arrays.deepEquals( this.tiles, otherEP.tiles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode( tiles);
     }
 
     boolean makeMove( MOVE move)
@@ -178,11 +187,18 @@ public class EightPuzzle
 
     public static void main( String[] args)
     {
-        EightPuzzle puz = new EightPuzzle();
-        EightPuzzle puz2 = new EightPuzzle( puz);
+        EightPuzzle e1 = new EightPuzzle();
+        EightPuzzle e2 = new EightPuzzle();
 
-        puz2.makeMove( MOVE.UP);
+        e2.makeMove( MOVE.UP);
+        e2.makeMove(MOVE.DOWN);
 
-        System.out.println( puz.equals( puz2));
+        System.out.println( e1.equals( e2));
+
+        HashSet<EightPuzzle> set = new HashSet<EightPuzzle>();
+        set.add( e1);
+        set.add( e2);
+
+        System.out.println( set.size());
     }
 }

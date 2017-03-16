@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Stack;
 
 /**
  * Created by deniz on 15/03/17.
@@ -7,88 +10,84 @@ public class Solver
 {
     public static void main( String[] args)
     {
-        EightPuzzle goal = new EightPuzzle();
         boolean solved = false;
-        PriorityQueue<EightPuzzle> q = new PriorityQueue<>(new HammingComparator());
+        PriorityQueue<EightPuzzle> openSet = new PriorityQueue<>(new HammingComparator());
+        HashSet<EightPuzzle> closedSet = new HashSet<>();
 
         EightPuzzle initial = new EightPuzzle();
         initial.garble(1000);
 
-        System.out.println( initial);
+//        System.out.println( initial);
 
         EightPuzzle cur;
-        EightPuzzle[] possibleMoves;
+        ArrayList<EightPuzzle> possibleMoves;
 
-        q.add(initial);
-        int cnt = 0;
+        openSet.add(initial);
 
-        //for (int z = 0; z < 20 && !solved; z++)
-        while ( !solved)
+        while ( openSet.size() > 0)
         {
-            cur = q.remove();
-            possibleMoves = getPossibleMoves(cur);
-
-            for (int i = 0; i < 4; i++)
-            {
-                if (possibleMoves[i] != null && !possibleMoves[i].equals( cur.getPrev()))
-                    q.add(possibleMoves[i]);
-            }
+            cur = openSet.remove();
 
             if (cur.isGoalState())
             {
-                solved = true;
+                System.out.println( closedSet.size());
+                printSolution( cur);
+                break;
             }
 
-            cnt++;
+            closedSet.add( cur);
+            possibleMoves = getPossibleMoves(cur);
+
+            for ( EightPuzzle e : possibleMoves)
+            {
+                if ( !closedSet.contains( e))
+                    openSet.add( e);
+            }
         }
-
-        System.out.println( cnt);
-
-/*/
-        EightPuzzle initial = new EightPuzzle();
-        initial.garble( 1000);
-
-        EightPuzzle[] possibleMoves = getPossibleMoves( initial);
-
-        System.out.println( initial);
-        System.out.println( initial.computeHamming());
-        System.out.println();
-
-        for ( int i = 0; i < 4; i++)
-        {
-            if ( possibleMoves[i] != null)
-                System.out.println( possibleMoves[i] + " " + possibleMoves[i].computeHamming());
-        }*/
     }
 
-    public static EightPuzzle[] getPossibleMoves( EightPuzzle puz)
+    public static ArrayList<EightPuzzle> getPossibleMoves(EightPuzzle puz)
     {
-        EightPuzzle[] result = new EightPuzzle[4];
+        ArrayList<EightPuzzle> result = new ArrayList<>(4);
         EightPuzzle copy = new EightPuzzle( puz);
 
         if ( copy.makeMove( EightPuzzle.MOVE.RIGHT))
         {
-            result[0] = copy;
+            result.add( copy);
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.DOWN))
         {
-            result[1] = copy;
+            result.add( copy);
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.LEFT))
         {
-            result[2] = copy;
+            result.add( copy);
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.UP))
         {
-            result[3] = copy;
+            result.add( copy);
         }
 
         return result;
+    }
+
+    public static void printSolution( EightPuzzle end)
+    {
+        Stack<EightPuzzle> stack = new Stack<>();
+        stack.push( end);
+
+        while ( stack.peek().getPrev() != null)
+            stack.push( stack.peek().getPrev());
+
+        System.out.println( "Solved in " + ( stack.size() - 1) + " moves\n");
+
+        while ( !stack.isEmpty())
+            System.out.println( stack.pop());
     }
 }
