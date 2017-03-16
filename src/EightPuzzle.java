@@ -1,68 +1,77 @@
+import java.util.Arrays;
+
 /**
  * Created by deniz on 15/03/17.
  *
- * Represents an 8 puzzle.
+ * Represents an 8 tiles.
  * Puzzles are generated in their goal state.
  */
 public class EightPuzzle
 {
-    private int[][] puzzle;
+    public static int[][] goalTiles = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+
+    private int[][] tiles;
     private int[] emptyTile;
 
-    // to be used to calculate heuristics
+    // to be used for state search
     private int movesSoFar;
+    private  EightPuzzle prev;
 
     public enum MOVE
     { RIGHT, DOWN, LEFT, UP }
 
     public EightPuzzle()
     {
-        puzzle = new int[3][3];
+        tiles = new int[3][3];
 
         int count = 1;
         for ( int i = 0; i < 3; i++)
             for ( int j = 0; j < 3; j++)
-                puzzle[i][j] = count++;
+                tiles[i][j] = count++;
 
-        // empty tile represented by 9 on puzzle
+        // empty tile represented by 9 on tiles
         // [0] holds y value, [1] holds x value
         emptyTile = new int[] { 2, 2 };
-
-        movesSoFar = 0;
     }
 
+    public EightPuzzle getPrev() { return prev; }
+
     // copy constructor not tested
-    public EightPuzzle( EightPuzzle toCopy)
+    public EightPuzzle( EightPuzzle prev)
     {
-        this.puzzle = new int[3][3];
+        this.tiles = new int[3][3];
 
         for ( int i = 0; i < 3; i++)
             for ( int j = 0; j < 3; j++)
-                this.puzzle[i][j] = toCopy.puzzle[i][j];
+                this.tiles[i][j] = prev.tiles[i][j];
 
         this.emptyTile = new int[2];
-        this.emptyTile[0] = toCopy.emptyTile[0];
-        this.emptyTile[1] = toCopy.emptyTile[1];
+        this.emptyTile[0] = prev.emptyTile[0];
+        this.emptyTile[1] = prev.emptyTile[1];
 
-        this.movesSoFar = toCopy.movesSoFar;
+        this.movesSoFar = prev.movesSoFar + 1;
+        this.prev = prev;
     }
 
     int[] getEmptyTile() { return emptyTile; }
 
-    public int[][] getPuzzle() { return puzzle; }
+    public int[][] getTiles() { return tiles; }
 
     int getTileContent(int y, int x)
     {
 
         if ( x >= 0 && x <= 2 && y >= 0 && y <= 2)
-            return puzzle[y][x];
+            return tiles[y][x];
         else
             return -1;
     }
 
     public int getMovesSoFar() { return movesSoFar; }
 
-    public void incrementMovesSoFar() { movesSoFar++; }
+    public boolean isGoalState()
+    {
+        return ( Arrays.deepEquals( this.tiles, goalTiles));
+    }
 
     // DOES NOT CHECK IF MOVES SO FAR ARE EQUAL
     public boolean equals( EightPuzzle other)
@@ -70,20 +79,7 @@ public class EightPuzzle
         if ( other == null)
             return false;
 
-        for ( int i = 0; i < 3; i++)
-            for ( int j = 0; j < 3; j++)
-            {
-                if ( this.puzzle[i][j] != other.puzzle[i][j])
-                    return false;
-            }
-
-        if ( this.emptyTile[0] != other.emptyTile[0])
-            return false;
-
-        if ( this.emptyTile[1] != other.emptyTile[1])
-            return false;
-
-        return true;
+        return Arrays.deepEquals( this.tiles, other.tiles);
     }
 
     boolean makeMove( MOVE move)
@@ -92,9 +88,10 @@ public class EightPuzzle
         {
             if ( emptyTile[1] < 2)
             {
-                puzzle[emptyTile[0]][emptyTile[1]] = puzzle[emptyTile[0]][emptyTile[1] + 1];
+                tiles[emptyTile[0]][emptyTile[1]] = tiles[emptyTile[0]][emptyTile[1] + 1];
                 emptyTile[1] = emptyTile[1] + 1;
-                puzzle[emptyTile[0]][emptyTile[1]] = 9;
+                tiles[emptyTile[0]][emptyTile[1]] = 9;
+                movesSoFar++;
                 return true;
             }
             else
@@ -104,9 +101,10 @@ public class EightPuzzle
         {
             if ( emptyTile[1] > 0)
             {
-                puzzle[emptyTile[0]][emptyTile[1]] = puzzle[emptyTile[0]][emptyTile[1] - 1];
+                tiles[emptyTile[0]][emptyTile[1]] = tiles[emptyTile[0]][emptyTile[1] - 1];
                 emptyTile[1] = emptyTile[1] - 1;
-                puzzle[emptyTile[0]][emptyTile[1]] = 9;
+                tiles[emptyTile[0]][emptyTile[1]] = 9;
+                movesSoFar++;
                 return true;
             }
             else
@@ -116,9 +114,10 @@ public class EightPuzzle
         {
             if ( emptyTile[0] < 2)
             {
-                puzzle[emptyTile[0]][emptyTile[1]] = puzzle[emptyTile[0] + 1][emptyTile[1]];
+                tiles[emptyTile[0]][emptyTile[1]] = tiles[emptyTile[0] + 1][emptyTile[1]];
                 emptyTile[0] = emptyTile[0] + 1;
-                puzzle[emptyTile[0]][emptyTile[1]] = 9;
+                tiles[emptyTile[0]][emptyTile[1]] = 9;
+                movesSoFar++;
                 return true;
             }
             else
@@ -128,9 +127,10 @@ public class EightPuzzle
         {
             if ( emptyTile[0] > 0)
             {
-                puzzle[emptyTile[0]][emptyTile[1]] = puzzle[emptyTile[0] - 1][emptyTile[1]];
+                tiles[emptyTile[0]][emptyTile[1]] = tiles[emptyTile[0] - 1][emptyTile[1]];
                 emptyTile[0] = emptyTile[0] - 1;
-                puzzle[emptyTile[0]][emptyTile[1]] = 9;
+                tiles[emptyTile[0]][emptyTile[1]] = 9;
+                movesSoFar++;
                 return true;
             }
             else
@@ -166,9 +166,9 @@ public class EightPuzzle
     @Override
     public String toString()
     {
-        String row0 = "[" + puzzle[0][0] + " " + puzzle[0][1] + " " + puzzle[0][2] + "]";
-        String row1 = "[" + puzzle[1][0] + " " + puzzle[1][1] + " " + puzzle[1][2] + "]";
-        String row2 = "[" + puzzle[2][0] + " " + puzzle[2][1] + " " + puzzle[2][2] + "]";
+        String row0 = "[" + tiles[0][0] + " " + tiles[0][1] + " " + tiles[0][2] + "]";
+        String row1 = "[" + tiles[1][0] + " " + tiles[1][1] + " " + tiles[1][2] + "]";
+        String row2 = "[" + tiles[2][0] + " " + tiles[2][1] + " " + tiles[2][2] + "]";
 
         String result = row0 + "\n" + row1 + "\n" + row2 + "\n";
 

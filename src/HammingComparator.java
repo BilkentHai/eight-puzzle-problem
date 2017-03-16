@@ -20,9 +20,9 @@ public class HammingComparator implements Comparator<EightPuzzle>
         {
             for (int j = 0; j < 3; j++)
             {
-                if ( puz.getPuzzle()[i][j] == 9)
+                if ( puz.getTiles()[i][j] == 9)
                     continue;
-                if ( puz.getPuzzle()[i][j] != GOAL_STATE.getPuzzle()[i][j])
+                if ( puz.getTiles()[i][j] != GOAL_STATE.getTiles()[i][j])
                     misplaced++;
             }
         }

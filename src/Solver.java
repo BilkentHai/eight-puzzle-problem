@@ -12,12 +12,11 @@ public class Solver
         PriorityQueue<EightPuzzle> q = new PriorityQueue<>(new HammingComparator());
 
         EightPuzzle initial = new EightPuzzle();
-        initial.garble(150);
+        initial.garble(1000);
 
         System.out.println( initial);
 
         EightPuzzle cur;
-        EightPuzzle prev = null;
         EightPuzzle[] possibleMoves;
 
         q.add(initial);
@@ -31,16 +30,15 @@ public class Solver
 
             for (int i = 0; i < 4; i++)
             {
-                if (possibleMoves[i] != null && !possibleMoves[i].equals( prev))
+                if (possibleMoves[i] != null && !possibleMoves[i].equals( cur.getPrev()))
                     q.add(possibleMoves[i]);
             }
 
-            if (cur.equals(goal))
+            if (cur.isGoalState())
             {
                 solved = true;
             }
 
-            prev = cur;
             cnt++;
         }
 
@@ -70,28 +68,24 @@ public class Solver
 
         if ( copy.makeMove( EightPuzzle.MOVE.RIGHT))
         {
-            copy.incrementMovesSoFar();
             result[0] = copy;
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.DOWN))
         {
-            copy.incrementMovesSoFar();
             result[1] = copy;
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.LEFT))
         {
-            copy.incrementMovesSoFar();
             result[2] = copy;
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.UP))
         {
-            copy.incrementMovesSoFar();
             result[3] = copy;
         }
 
