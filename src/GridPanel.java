@@ -4,23 +4,37 @@ import java.awt.event.*;
 
 /**
  * Created by deniz on 15/03/17.
+ *
+ * GUI to test 8 puzzles.
  */
 public class GridPanel extends JPanel
 {
-    static final int ROWS = 3;
-    static final int COLS = 3;
-    static final int CELL_SIDE = 30;
-    static final int PANEL_WIDTH = CELL_SIDE * COLS;
-    static final int PANEL_HEIGHT = CELL_SIDE * ROWS;
-    static final int X_OFFSET = 12;
-    static final int Y_OFFSET = 20;
-    static final int NUM_OF_CELLS = ROWS * COLS;
+    private static final int ROWS = 3;
+    private static final int COLS = 3;
+    private static final int CELL_SIDE = 30;
+    private static final int PANEL_WIDTH = CELL_SIDE * COLS;
+    private static final int PANEL_HEIGHT = CELL_SIDE * ROWS;
+    private static final int X_OFFSET = 12;
+    private static final int Y_OFFSET = 20;
+    private static final int NUM_OF_CELLS = ROWS * COLS;
 
     EightPuzzle puzzle;
 
     public GridPanel()
     {
         puzzle = new EightPuzzle();
+
+        setPreferredSize( new Dimension( PANEL_WIDTH + 1, PANEL_HEIGHT + 1));
+        this.addKeyListener( new MyListener());
+        this.setFocusable( true);
+    }
+
+    public GridPanel( EightPuzzle puz)
+    {
+        if ( puz == null)
+            puzzle = new EightPuzzle();
+        else
+            puzzle = puz;
 
         setPreferredSize( new Dimension( PANEL_WIDTH + 1, PANEL_HEIGHT + 1));
         this.addKeyListener( new MyListener());
@@ -56,13 +70,15 @@ public class GridPanel extends JPanel
         }
     }
 
-
     public static void main( String[] args)
     {
         JFrame frame = new JFrame();
         frame.setTitle( "8");
-        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-        GridPanel panel = new GridPanel();
+        frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
+
+        EightPuzzle puz = new EightPuzzle();
+        GridPanel panel = new GridPanel( puz);
+
         frame.add( panel);
         frame.pack();
         frame.setResizable( false);
@@ -74,10 +90,10 @@ public class GridPanel extends JPanel
         @Override
         public void keyPressed( KeyEvent e)
         {
-            if ( e.getKeyCode() == KeyEvent.VK_UP) { puzzle.makeMove( EightPuzzle.MOVE.UP); }
-            else if ( e.getKeyCode() == KeyEvent.VK_LEFT) { puzzle.makeMove( EightPuzzle.MOVE.LEFT); }
-            else if ( e.getKeyCode() == KeyEvent.VK_RIGHT) { puzzle.makeMove( EightPuzzle.MOVE.RIGHT); }
-            else if ( e.getKeyCode() == KeyEvent.VK_DOWN) { puzzle.makeMove( EightPuzzle.MOVE.DOWN); }
+            if ( e.getKeyCode() == KeyEvent.VK_DOWN) { puzzle.makeMove( EightPuzzle.MOVE.UP); }
+            else if ( e.getKeyCode() == KeyEvent.VK_RIGHT) { puzzle.makeMove( EightPuzzle.MOVE.LEFT); }
+            else if ( e.getKeyCode() == KeyEvent.VK_LEFT) { puzzle.makeMove( EightPuzzle.MOVE.RIGHT); }
+            else if ( e.getKeyCode() == KeyEvent.VK_UP) { puzzle.makeMove( EightPuzzle.MOVE.DOWN); }
 
             repaint();
         }
