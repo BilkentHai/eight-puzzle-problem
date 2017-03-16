@@ -2,6 +2,8 @@ import java.util.Comparator;
 
 /**
  * Created by deniz on 15/03/17.
+ *
+ * Hamming distance function for priority queue
  */
 public class HammingComparator implements Comparator<EightPuzzle>
 {

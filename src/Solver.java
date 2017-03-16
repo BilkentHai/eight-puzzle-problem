@@ -5,6 +5,8 @@ import java.util.Stack;
 
 /**
  * Created by deniz on 15/03/17.
+ *
+ * Randomly generates and solves 8 puzzles
  */
 public class Solver
 {

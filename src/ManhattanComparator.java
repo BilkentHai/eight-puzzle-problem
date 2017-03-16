@@ -2,6 +2,8 @@ import java.util.Comparator;
 
 /**
  * Created by deniz on 16/03/17.
+ *
+ * Manhattan distance function for priority queue
  */
 public class ManhattanComparator implements Comparator<EightPuzzle>
 {
@@ -36,13 +38,5 @@ public class ManhattanComparator implements Comparator<EightPuzzle>
         result[0] = tile / 3;
         result[1] = tile % 3;
         return result;
-    }
-
-    public static void main( String[] args)
-    {
-        EightPuzzle e = new EightPuzzle();
-        e.garble( 3);
-        System.out.println( e);
-        System.out.println( computeManhattan( e));
     }
 }

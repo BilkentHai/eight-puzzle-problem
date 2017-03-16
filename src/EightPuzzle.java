@@ -5,7 +5,8 @@ import java.util.HashSet;
  * Created by deniz on 15/03/17.
  *
  * Represents an 8 tiles.
- * Puzzles are generated in their goal state.
+ * Puzzles are generated in their goal state and can be garbled to reach random states.
+ * The empty tile is represented by 9 in the tiles array.
  */
 public class EightPuzzle
 {
@@ -30,7 +31,7 @@ public class EightPuzzle
             for ( int j = 0; j < 3; j++)
                 tiles[i][j] = count++;
 
-        // empty tile represented by 9 on tiles
+        // Hold empty tile location to avoid search
         // [0] holds y value, [1] holds x value
         emptyTile = new int[] { 2, 2 };
     }
@@ -74,6 +75,7 @@ public class EightPuzzle
         return ( Arrays.deepEquals( this.tiles, goalTiles));
     }
 
+    // Overriding equals and hashcode functions to use HashMap
     @Override
     public boolean equals( Object other)
     {
