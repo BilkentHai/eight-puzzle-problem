@@ -5,8 +5,6 @@ import java.util.Comparator;
  */
 public class HammingComparator implements Comparator<EightPuzzle>
 {
-    private static final EightPuzzle GOAL_STATE = new EightPuzzle();
-
     public int compare(EightPuzzle x, EightPuzzle y)
     {
         return computeHamming( x) - computeHamming( y);
@@ -22,7 +20,7 @@ public class HammingComparator implements Comparator<EightPuzzle>
             {
                 if ( puz.getTiles()[i][j] == 9)
                     continue;
-                if ( puz.getTiles()[i][j] != GOAL_STATE.getTiles()[i][j])
+                if ( puz.getTiles()[i][j] != EightPuzzle.goalTiles[i][j])
                     misplaced++;
             }
         }

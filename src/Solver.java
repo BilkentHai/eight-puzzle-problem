@@ -10,12 +10,11 @@ public class Solver
 {
     public static void main( String[] args)
     {
-        boolean solved = false;
-        PriorityQueue<EightPuzzle> openSet = new PriorityQueue<>(new HammingComparator());
+        PriorityQueue<EightPuzzle> openSet = new PriorityQueue<>(new ManhattanComparator());
         HashSet<EightPuzzle> closedSet = new HashSet<>();
 
         EightPuzzle initial = new EightPuzzle();
-        initial.garble(1000);
+        initial.garble( 100000);
 
 //        System.out.println( initial);
 
@@ -30,7 +29,7 @@ public class Solver
 
             if (cur.isGoalState())
             {
-                System.out.println( closedSet.size());
+                System.out.println( "Closed set size: " + closedSet.size());
                 printSolution( cur);
                 break;
             }
