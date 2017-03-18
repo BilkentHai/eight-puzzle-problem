@@ -18,13 +18,17 @@ public class GridPanel extends JPanel
     private static final int Y_OFFSET = 20;
     private static final int NUM_OF_CELLS = ROWS * COLS;
 
-    EightPuzzle puzzle;
+    private EightPuzzle puzzle;
+
+    public void setPuzzle(EightPuzzle puzzle) { this.puzzle = puzzle; }
 
     public GridPanel()
     {
         puzzle = new EightPuzzle();
 
         setPreferredSize( new Dimension( PANEL_WIDTH + 1, PANEL_HEIGHT + 1));
+        this.setLayout( new BorderLayout( 3, 3));
+
         this.addKeyListener( new MyListener());
         this.setFocusable( true);
     }
@@ -60,6 +64,7 @@ public class GridPanel extends JPanel
             g.drawLine( 0, i, PANEL_WIDTH, i);
 
         // Draw cell contents
+
         for ( int i = 0; i < ROWS; i++)
         {
             for ( int j = 0; j < COLS; j++)
@@ -76,8 +81,7 @@ public class GridPanel extends JPanel
         frame.setTitle( "8");
         frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
 
-        EightPuzzle puz = new EightPuzzle();
-        GridPanel panel = new GridPanel( puz);
+        GridPanel panel = new GridPanel();
 
         frame.add( panel);
         frame.pack();

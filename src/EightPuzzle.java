@@ -4,7 +4,7 @@ import java.util.HashSet;
 /**
  * Created by deniz on 15/03/17.
  *
- * Represents an 8 tiles.
+ * Represents an 8 puzzle state.
  * Puzzles are generated in their goal state and can be garbled to reach random states.
  * The empty tile is represented by 9 in the tiles array.
  */
@@ -38,21 +38,20 @@ public class EightPuzzle
 
     public EightPuzzle getPrev() { return prev; }
 
-    // copy constructor not tested
-    public EightPuzzle( EightPuzzle prev)
+    public EightPuzzle( EightPuzzle toCopy)
     {
         this.tiles = new int[3][3];
 
         for ( int i = 0; i < 3; i++)
             for ( int j = 0; j < 3; j++)
-                this.tiles[i][j] = prev.tiles[i][j];
+                this.tiles[i][j] = toCopy.tiles[i][j];
 
         this.emptyTile = new int[2];
-        this.emptyTile[0] = prev.emptyTile[0];
-        this.emptyTile[1] = prev.emptyTile[1];
+        this.emptyTile[0] = toCopy.emptyTile[0];
+        this.emptyTile[1] = toCopy.emptyTile[1];
 
-        this.movesSoFar = prev.movesSoFar + 1;
-        this.prev = prev;
+        this.movesSoFar = toCopy.movesSoFar;
+        this.prev = toCopy.prev;
     }
 
     int[] getEmptyTile() { return emptyTile; }
@@ -76,6 +75,7 @@ public class EightPuzzle
     }
 
     // Overriding equals and hashcode functions to use HashMap
+    // Equals only checks equality between the state of tiles
     @Override
     public boolean equals( Object other)
     {
@@ -151,7 +151,7 @@ public class EightPuzzle
         return false;
     }
 
-    void makeRandomMove()
+    private void makeRandomMove()
     {
         int randomMove = (int) ( Math.random() * 4);
 

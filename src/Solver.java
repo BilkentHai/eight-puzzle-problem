@@ -1,40 +1,46 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by deniz on 15/03/17.
  *
- * Randomly generates and solves 8 puzzles
+ * Randomly generates and solves 8 puzzles.
+ * Saves move count and closed set size for the last puzzle solved.
+ * Does not mutate its inputs.
  */
 public class Solver
 {
-    public static void main( String[] args)
+    private PriorityQueue<EightPuzzle> openSet;
+    private HashSet<EightPuzzle> closedSet;
+    private int lastMoveCount;
+    private int lastClosedSetSize;
+
+    public Solver(Comparator<EightPuzzle> comp)
     {
-        PriorityQueue<EightPuzzle> openSet = new PriorityQueue<>(new ManhattanComparator());
-        HashSet<EightPuzzle> closedSet = new HashSet<>();
+        openSet = new PriorityQueue<>( comp);
+        closedSet = new HashSet<>();
+        lastMoveCount = -1;
+        lastClosedSetSize = -1;
+    }
 
-        EightPuzzle initial = new EightPuzzle();
-        initial.garble( 100000);
+    public int getLastMoveCount() { return lastMoveCount; }
 
-//        System.out.println( initial);
+    public int getLastClosedSetSize() { return lastClosedSetSize; }
 
-        EightPuzzle cur;
+    public EightPuzzle solve( EightPuzzle puz)
+    {
+        openSet.clear();
+        closedSet.clear();
+        openSet.add( puz);
+
+        EightPuzzle cur = null;
         ArrayList<EightPuzzle> possibleMoves;
-
-        openSet.add(initial);
 
         while ( openSet.size() > 0)
         {
             cur = openSet.remove();
 
             if (cur.isGoalState())
-            {
-                System.out.println( "Closed set size: " + closedSet.size());
-                printSolution( cur);
                 break;
-            }
 
             closedSet.add( cur);
             possibleMoves = getPossibleMoves(cur);
@@ -45,9 +51,14 @@ public class Solver
                     openSet.add( e);
             }
         }
+
+        lastClosedSetSize = closedSet.size();
+        lastMoveCount = cur.getMovesSoFar();
+
+        return cur;
     }
 
-    public static ArrayList<EightPuzzle> getPossibleMoves(EightPuzzle puz)
+    private ArrayList<EightPuzzle> getPossibleMoves(EightPuzzle puz)
     {
         ArrayList<EightPuzzle> result = new ArrayList<>(4);
         EightPuzzle copy = new EightPuzzle( puz);
@@ -78,7 +89,7 @@ public class Solver
         return result;
     }
 
-    public static void printSolution( EightPuzzle end)
+    public static Stack<EightPuzzle> getSolutionSteps( EightPuzzle end)
     {
         Stack<EightPuzzle> stack = new Stack<>();
         stack.push( end);
@@ -86,9 +97,6 @@ public class Solver
         while ( stack.peek().getPrev() != null)
             stack.push( stack.peek().getPrev());
 
-        System.out.println( "Solved in " + ( stack.size() - 1) + " moves\n");
-
-        while ( !stack.isEmpty())
-            System.out.println( stack.pop());
+        return stack;
     }
 }
