@@ -1,5 +1,6 @@
+package uni.bilkent.hai;
+
 import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * Created by deniz on 15/03/17.
@@ -38,6 +39,8 @@ public class EightPuzzle
 
     public EightPuzzle getPrev() { return prev; }
 
+    public void setPrev( EightPuzzle puz) { this.prev = puz; }
+
     public EightPuzzle( EightPuzzle toCopy)
     {
         this.tiles = new int[3][3];
@@ -54,11 +57,11 @@ public class EightPuzzle
         this.prev = toCopy.prev;
     }
 
-    int[] getEmptyTile() { return emptyTile; }
+    public int[] getEmptyTile() { return emptyTile; }
 
     public int[][] getTiles() { return tiles; }
 
-    int getTileContent(int y, int x)
+    public int getTileContent(int y, int x)
     {
 
         if ( x >= 0 && x <= 2 && y >= 0 && y <= 2)
@@ -93,7 +96,7 @@ public class EightPuzzle
         return Arrays.deepHashCode( tiles);
     }
 
-    boolean makeMove( MOVE move)
+    public boolean makeMove( MOVE move)
     {
         if ( move == MOVE.RIGHT)
         {
@@ -185,22 +188,5 @@ public class EightPuzzle
 
         result = result.replace( '9', ' ');
         return result;
-    }
-
-    public static void main( String[] args)
-    {
-        EightPuzzle e1 = new EightPuzzle();
-        EightPuzzle e2 = new EightPuzzle();
-
-        e2.makeMove( MOVE.UP);
-        e2.makeMove(MOVE.DOWN);
-
-        System.out.println( e1.equals( e2));
-
-        HashSet<EightPuzzle> set = new HashSet<EightPuzzle>();
-        set.add( e1);
-        set.add( e2);
-
-        System.out.println( set.size());
     }
 }

@@ -1,3 +1,5 @@
+package uni.bilkent.hai;
+
 import java.util.*;
 
 /**
@@ -66,23 +68,27 @@ public class Solver
         if ( copy.makeMove( EightPuzzle.MOVE.RIGHT))
         {
             result.add( copy);
+            copy.setPrev( puz);
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.DOWN))
         {
             result.add( copy);
+            copy.setPrev( puz);
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.LEFT))
         {
             result.add( copy);
+            copy.setPrev( puz);
             copy = new EightPuzzle( puz);
         }
 
         if ( copy.makeMove( EightPuzzle.MOVE.UP))
         {
+            copy.setPrev( puz);
             result.add( copy);
         }
 
@@ -92,6 +98,7 @@ public class Solver
     public static Stack<EightPuzzle> getSolutionSteps( EightPuzzle end)
     {
         Stack<EightPuzzle> stack = new Stack<>();
+
         stack.push( end);
 
         while ( stack.peek().getPrev() != null)

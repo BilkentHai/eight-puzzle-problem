@@ -1,6 +1,11 @@
+package uni.bilkent.hai.gui;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import uni.bilkent.hai.EightPuzzle;
 
 /**
  * Created by deniz on 15/03/17.
@@ -20,29 +25,23 @@ public class GridPanel extends JPanel
 
     private EightPuzzle puzzle;
 
-    public void setPuzzle(EightPuzzle puzzle) { this.puzzle = puzzle; }
-
-    public GridPanel()
-    {
-        puzzle = new EightPuzzle();
-
-        setPreferredSize( new Dimension( PANEL_WIDTH + 1, PANEL_HEIGHT + 1));
-        this.setLayout( new BorderLayout( 3, 3));
-
-        this.addKeyListener( new MyListener());
-        this.setFocusable( true);
-    }
-
     public GridPanel( EightPuzzle puz)
     {
-        if ( puz == null)
-            puzzle = new EightPuzzle();
-        else
-            puzzle = puz;
+        puzzle = puz;
 
         setPreferredSize( new Dimension( PANEL_WIDTH + 1, PANEL_HEIGHT + 1));
-        this.addKeyListener( new MyListener());
-        this.setFocusable( true);
+        //this.setFocusable( true);
+
+        setLayout( new BorderLayout());
+        setBorder( new LineBorder( Color.BLACK));
+    }
+
+    public EightPuzzle getPuzzle() { return puzzle; }
+
+    public void setPuzzle(EightPuzzle puzzle)
+    {
+        this.puzzle = puzzle;
+        repaint();
     }
 
     @Override
@@ -50,11 +49,12 @@ public class GridPanel extends JPanel
     {
         super.paintComponent( g);
 
-        // Draw panel borders
+        /* Draw panel borders
         g.drawLine( 0, 0, 0, PANEL_HEIGHT);
         g.drawLine( 0, 0, PANEL_WIDTH, 0);
         g.drawLine( PANEL_WIDTH, 0, PANEL_WIDTH, PANEL_HEIGHT);
         g.drawLine( 0, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+        */
 
         // Draw cell borders
         for ( int i = CELL_SIDE; i < PANEL_WIDTH; i += CELL_SIDE)
@@ -64,32 +64,20 @@ public class GridPanel extends JPanel
             g.drawLine( 0, i, PANEL_WIDTH, i);
 
         // Draw cell contents
-
-        for ( int i = 0; i < ROWS; i++)
+        if ( puzzle != null)
         {
-            for ( int j = 0; j < COLS; j++)
+            for (int i = 0; i < ROWS; i++)
             {
-                if ( !( puzzle.getEmptyTile()[0] == i && puzzle.getEmptyTile()[1] == j))
-                    g.drawString( puzzle.getTileContent( i, j) + "", j * CELL_SIDE + X_OFFSET, i * CELL_SIDE + Y_OFFSET);
+                for (int j = 0; j < COLS; j++)
+                {
+                    if (!(puzzle.getEmptyTile()[0] == i && puzzle.getEmptyTile()[1] == j))
+                        g.drawString(puzzle.getTileContent(i, j) + "", j * CELL_SIDE + X_OFFSET, i * CELL_SIDE + Y_OFFSET);
+                }
             }
         }
     }
 
-    public static void main( String[] args)
-    {
-        JFrame frame = new JFrame();
-        frame.setTitle( "8");
-        frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
-
-        GridPanel panel = new GridPanel();
-
-        frame.add( panel);
-        frame.pack();
-        frame.setResizable( false);
-        frame.setVisible( true);
-    }
-
-    class MyListener extends KeyAdapter
+    class KbListener extends KeyAdapter
     {
         @Override
         public void keyPressed( KeyEvent e)

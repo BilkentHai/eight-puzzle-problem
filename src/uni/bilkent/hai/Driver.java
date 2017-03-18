@@ -1,3 +1,5 @@
+package uni.bilkent.hai;
+
 import java.util.ArrayList;
 
 /**
@@ -7,11 +9,11 @@ public class Driver
 {
     public static void main( String[] a)
     {
-        ArrayList<EightPuzzle> list = PuzzleGenerator.generate( 300, 300);
+        ArrayList<EightPuzzle> puzList = PuzzleGenerator.generate( 20, 1000);
         Solver hamSolver = new Solver( new HammingComparator());
         Solver manSolver = new Solver( new ManhattanComparator());
 
-        for ( EightPuzzle p : list)
+        for ( EightPuzzle p : puzList)
         {
             hamSolver.solve( p);
             System.out.println( hamSolver.getLastClosedSetSize() + " " + hamSolver.getLastMoveCount());
