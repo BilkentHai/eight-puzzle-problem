@@ -61,6 +61,19 @@ public class SolutionPanel extends JPanel
         add( bottomPanel, BorderLayout.SOUTH);
 
         setBorder( new EmptyBorder( 3, 3, 3, 3));
+
+        getInputMap().put(KeyStroke.getKeyStroke("F2"), "doSomething");
+
+        InputMap im = getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = getActionMap();
+
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "RightArrow");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "LeftArrow");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "Space");
+
+        am.put("RightArrow", new KeyAction("RightArrow"));
+        am.put("LeftArrow", new KeyAction("LeftArrow"));
+        am.put("Space", new KeyAction("Space"));
     }
 
     private void updateStepLabel()
@@ -126,6 +139,27 @@ public class SolutionPanel extends JPanel
             nextButton.setEnabled( true);
 
             updateStepLabel();
+        }
+    }
+
+    private class KeyAction extends AbstractAction {
+        private String cmd;
+
+        public KeyAction( String cmd) {
+            this.cmd = cmd;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if ( cmd.equalsIgnoreCase("LeftArrow") && prevButton.isEnabled())
+                for(ActionListener a: prevButton.getActionListeners())
+                    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {});
+            else if ( cmd.equalsIgnoreCase("RightArrow") && nextButton.isEnabled())
+                for(ActionListener a: nextButton.getActionListeners())
+                    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {});
+            else if ( cmd.equalsIgnoreCase("Space"))
+                for(ActionListener a: genButton.getActionListeners())
+                    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {});
         }
     }
 }
