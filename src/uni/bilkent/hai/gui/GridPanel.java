@@ -32,6 +32,7 @@ public class GridPanel extends JPanel
         setPreferredSize( new Dimension( PANEL_WIDTH + 1, PANEL_HEIGHT + 1));
         //this.setFocusable( true);
 
+        setBackground( new Color(250, 255, 134));
         setLayout( new BorderLayout());
         setBorder( new LineBorder( Color.BLACK));
     }

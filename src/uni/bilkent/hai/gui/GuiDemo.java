@@ -13,7 +13,11 @@ public class GuiDemo
         frame.add( new SolutionPanel());
         frame.pack();
         frame.setTitle( "8 Puzzle Demo");
-        frame.setVisible( true);
+        frame.setResizable( false);
+        frame.setLocationRelativeTo( null);
         frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
+
+        frame.setVisible( true);
+
     }
 }
