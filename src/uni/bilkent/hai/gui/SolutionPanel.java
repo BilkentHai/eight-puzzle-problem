@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Stack;
 
@@ -60,7 +59,7 @@ public class SolutionPanel extends JPanel
         add( genButton, BorderLayout.EAST);
         add( bottomPanel, BorderLayout.SOUTH);
 
-        setBorder( new EmptyBorder( 3, 3, 3, 3));
+        setBorder( new EmptyBorder( 3, 3, 0, 3));
 
         getInputMap().put(KeyStroke.getKeyStroke("F2"), "doSomething");
 

@@ -9,16 +9,22 @@ public class Driver
 {
     public static void main( String[] a)
     {
-        ArrayList<EightPuzzle> puzList = PuzzleGenerator.generate( 20, 1000);
+        ArrayList<EightPuzzle> puzList = PuzzleGenerator.generate( 100, 1000);
         Solver hamSolver = new Solver( new HammingComparator());
         Solver manSolver = new Solver( new ManhattanComparator());
 
+        int i = 0;
         for ( EightPuzzle p : puzList)
         {
+            System.out.println( "Puzzle " + ++i);
+            System.out.println( p);
             hamSolver.solve( p);
-            System.out.println( hamSolver.getLastClosedSetSize() + " " + hamSolver.getLastMoveCount());
+            System.out.println( "Hamming closed set size: " + hamSolver.getLastClosedSetSize());
+            System.out.println( "Hamming solution length: "  + hamSolver.getLastMoveCount());
             manSolver.solve( p);
-            System.out.println( manSolver.getLastClosedSetSize() + " " + manSolver.getLastMoveCount());
+            System.out.println( "Manhattan closed set size: " + manSolver.getLastClosedSetSize());
+            System.out.println( "Manhattan solution length: "  + manSolver.getLastMoveCount());
+            System.out.println();
         }
     }
 }
