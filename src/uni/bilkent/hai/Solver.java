@@ -60,6 +60,59 @@ public class Solver
         return cur;
     }
 
+    public EightPuzzle printSolve( EightPuzzle puz)
+    {
+        openSet.clear();
+        closedSet.clear();
+        openSet.add( puz);
+
+        System.out.println( "Added initial state to open set: ");
+        System.out.println( puz);
+
+        EightPuzzle cur = null;
+        ArrayList<EightPuzzle> possibleMoves;
+
+        while ( openSet.size() > 0)
+        {
+            cur = openSet.remove();
+            System.out.println( "Removed from open set: ");
+            System.out.println( cur);
+
+            if (cur.isGoalState())
+            {
+                System.out.println( "Goal state found.");
+                System.out.println( "Closed set size: " + closedSet.size());
+                System.out.println( "Solution length: " + cur.getMovesSoFar());
+                System.out.println();
+
+                System.out.println( "Printing solution steps: ");
+                Solver.printSolution( cur);
+                break;
+            }
+
+            closedSet.add( cur);
+            System.out.println( "Added to closed set: ");
+            System.out.println( cur);
+
+            possibleMoves = getPossibleMoves(cur);
+
+            for ( EightPuzzle e : possibleMoves)
+            {
+                if ( !closedSet.contains( e))
+                {
+                    openSet.add(e);
+                    System.out.println( "Added to open set: ");
+                    System.out.println( e);
+                }
+            }
+        }
+
+        lastClosedSetSize = closedSet.size();
+        lastMoveCount = cur.getMovesSoFar();
+
+        return cur;
+    }
+
     private ArrayList<EightPuzzle> getPossibleMoves(EightPuzzle puz)
     {
         ArrayList<EightPuzzle> result = new ArrayList<>(4);
@@ -105,5 +158,13 @@ public class Solver
             stack.push( stack.peek().getPrev());
 
         return stack;
+    }
+
+    public static void printSolution( EightPuzzle end)
+    {
+        Stack<EightPuzzle> stack = getSolutionSteps( end);
+
+        while ( !stack.isEmpty())
+            System.out.println( stack.pop());
     }
 }
